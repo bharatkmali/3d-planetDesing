@@ -47,6 +47,7 @@ function App() {
       <StarField />
       <Navigation />
       <main ref={mainContentRef} className="main-content">
+      
         <PlanetDisplay 
           focusedPlanet={focusedPlanet} 
           onPlanetClick={handlePlanetClick}
