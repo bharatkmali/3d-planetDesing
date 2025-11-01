@@ -42,9 +42,9 @@ function App() {
   return (
     <div 
       className={`app ${isLoaded ? 'loaded' : ''}`}
-      style={{ backgroundImage: `url(${spaceBg})` }}
+      // style={{ backgroundImage: `url(${spaceBg})` }}
     >
-      {/* <StarField /> */}
+      <StarField />
       <Navigation />
       <main ref={mainContentRef} className="main-content">
         <PlanetDisplay 

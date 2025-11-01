@@ -1,6 +1,6 @@
 .orbital-system {
   position: absolute;
-  top: 50%;
+  top: 65%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: min(1500px, 100vw);
@@ -24,10 +24,53 @@
 
 .celestial-body.center-planet {
   z-index: 1000;
+  position: relative;
+}
+
+.celestial-body.center-planet::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  border-radius: 50%;
+  /* background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.15) 30%, transparent 70%); */
+  pointer-events: none;
+  z-index: -1;
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.celestial-body.center-planet::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150%;
+  height: 150%;
+  border-radius: 50%;
+  /* background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 40%, transparent 70%); */
+  pointer-events: none;
+  z-index: -2;
+  filter: blur(20px);
 }
 
 .celestial-body.center-planet .body-image {
-  filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.3));
+  box-shadow:
+    inset -20px -20px 60px rgba(0, 0, 0, 0.8),  /* inner shadow (dark side) */
+    inset 10px 10px 20px rgba(255, 255, 255, 0.3), /* light reflection */
+    0 0 40px rgba(0, 0, 0, 0.7); /* outer ambient shadow */
+  filter: brightness(1.1) contrast(1.05);
+  /* filter: drop-shadow(0 0 80px rgba(255, 255, 255, 0.5)) 
+          drop-shadow(0 0 120px rgba(255, 255, 255, 0.3))
+          drop-shadow(0 0 160px rgba(255, 255, 255, 0.2)); */
+  /* box-shadow: 
+    0 0 100px rgba(255, 255, 255, 0.4),
+    0 0 150px rgba(255, 255, 255, 0.3),
+    0 0 200px rgba(255, 255, 255, 0.2),
+    inset -30px -30px 60px rgba(0, 0, 0, 0.2); */
 }
 
 .body-image {
@@ -35,8 +78,20 @@
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, filter 0.3s ease;
   pointer-events: none;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
 }
 
 .celestial-body:hover .body-image,
@@ -155,52 +210,150 @@
   margin: -700px 0 0 -700px;
 }
 
+/* Tablet styles */
 @media (max-width: 1024px) {
   .orbital-system {
-    width: min(1200px, 90vw);
-    height: min(1200px, 90vh);
+    width: min(1200px, 95vw);
+    height: min(1200px, 95vh);
+    top: 70%;
+  }
+
+  .celestial-body.center-planet .body-image {
+    filter: drop-shadow(0 0 60px rgba(255, 255, 255, 0.4)) 
+            drop-shadow(0 0 100px rgba(255, 255, 255, 0.25))
+            drop-shadow(0 0 140px rgba(255, 255, 255, 0.15));
+    box-shadow: 
+      0 0 80px rgba(255, 255, 255, 0.35),
+      0 0 120px rgba(255, 255, 255, 0.25),
+      0 0 160px rgba(255, 255, 255, 0.15);
+  }
+
+  .celestial-body.center-planet::before {
+    width: 115%;
+    height: 115%;
+  }
+
+  .celestial-body.center-planet::after {
+    width: 140%;
+    height: 140%;
   }
 }
 
+/* Mobile styles */
 @media (max-width: 768px) {
   .orbital-system {
-    width: min(900px, 85vw);
-    height: min(900px, 85vh);
+    width: min(900px, 100vw);
+    height: min(900px, 100vh);
+    top: 70%;
+    left: 50%;
+  }
+
+  .celestial-body {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .celestial-body.center-planet .body-image {
+    filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.4)) 
+            drop-shadow(0 0 70px rgba(255, 255, 255, 0.25))
+            drop-shadow(0 0 100px rgba(255, 255, 255, 0.15));
+    box-shadow: 
+      0 0 60px rgba(255, 255, 255, 0.3),
+      0 0 90px rgba(255, 255, 255, 0.2),
+      0 0 120px rgba(255, 255, 255, 0.15);
+  }
+
+  .celestial-body.center-planet::before {
+    width: 110%;
+    height: 110%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.12) 30%, transparent 70%);
+  }
+
+  .celestial-body.center-planet::after {
+    width: 130%;
+    height: 130%;
+    filter: blur(15px);
   }
 
   .orbital-path {
-    opacity: 0.5;
+    opacity: 0.4;
   }
 
   .body-name {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
+    top: calc(100% + 10px);
   }
 
-  .celestial-body {
-    --size: calc(var(--size) * 0.9);
+  .celestial-body:active .body-image,
+  .celestial-body:active .body-sphere {
+    transform: scale(1.1);
   }
 
-  .celestial-body.focused {
-    transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.6) !important;
+  .celestial-body.center-planet:active .body-image {
+    transform: scale(1);
   }
 }
 
+/* Small mobile styles */
 @media (max-width: 480px) {
   .orbital-system {
-    width: min(700px, 80vw);
-    height: min(700px, 80vh);
+    width: min(100vw, 600px);
+    height: min(100vh, 600px);
+    top: 68%;
   }
 
-  .celestial-body {
-    --size: calc(var(--size) * 0.8);
+  .celestial-body.center-planet .body-image {
+    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.35)) 
+            drop-shadow(0 0 50px rgba(255, 255, 255, 0.2))
+            drop-shadow(0 0 70px rgba(255, 255, 255, 0.1));
+    box-shadow: 
+      0 0 40px rgba(255, 255, 255, 0.25),
+      0 0 60px rgba(255, 255, 255, 0.15),
+      0 0 80px rgba(255, 255, 255, 0.1);
   }
 
-  .celestial-body.focused {
-    transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.4) !important;
+  .celestial-body.center-planet::before {
+    width: 105%;
+    height: 105%;
+    animation: none;
+    opacity: 0.7;
+  }
+
+  .celestial-body.center-planet::after {
+    width: 120%;
+    height: 120%;
+    filter: blur(12px);
+  }
+
+  .body-name {
+    font-size: 0.6rem;
+    top: calc(100% + 8px);
   }
 
   .orbital-path {
     display: none;
+  }
+}
+
+/* Extra small mobile */
+@media (max-width: 360px) {
+  .orbital-system {
+    width: min(100vw, 500px);
+    height: min(100vh, 500px);
+    top: 65%;
+  }
+
+  .celestial-body.center-planet::before,
+  .celestial-body.center-planet::after {
+    display: none;
+  }
+
+  .celestial-body.center-planet .body-image {
+    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.3)) 
+            drop-shadow(0 0 40px rgba(255, 255, 255, 0.15));
+    box-shadow: 
+      0 0 30px rgba(255, 255, 255, 0.2),
+      0 0 50px rgba(255, 255, 255, 0.1);
   }
 }
 

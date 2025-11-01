@@ -7,7 +7,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10rem 2rem 2rem;
+  padding: 8rem 2rem 1rem;
   animation: fadeIn 0.6s ease-in;
   pointer-events: none;
 }
@@ -39,14 +39,14 @@
 }
 
 .planet-name {
-  font-size: 4rem;
+  font-size: 4.5rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
   color: #ffffff;
-  margin: 0 0 3rem 0;
+  margin: 0 0 2.5rem 0;
   text-transform: uppercase;
-  text-shadow: 0 0 20px rgba(100, 108, 255, 0.5);
-  animation: glow 3s ease-in-out infinite alternate;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
 @keyframes glow {
@@ -60,11 +60,12 @@
 
 .planet-stats {
   display: flex;
-  gap: 3rem;
+  gap: 3.5rem;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
   animation: slideUp 1s ease-out 0.3s both;
+  max-width: 1200px;
 }
 
 @keyframes slideUp {
@@ -88,15 +89,18 @@
 
 .stat-label {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.7);
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  font-weight: 400;
+  margin-bottom: 0.25rem;
 }
 
 .stat-value {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   color: #ffffff;
-  font-weight: 500;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .planet-container {
@@ -150,17 +154,17 @@
 }
 
 .planet.focused {
-  box-shadow: 
+  /* box-shadow: 
     0 0 80px rgba(155, 89, 182, 0.8),
     0 0 150px rgba(108, 92, 231, 0.6),
-    0 0 200px rgba(97, 218, 251, 0.4);
+    0 0 200px rgba(97, 218, 251, 0.4); */
   transform: scale(1.1);
 }
 
 .etheron {
-  box-shadow: 
+  /* box-shadow: 
     0 0 60px rgba(155, 89, 182, 0.6),
-    0 0 100px rgba(108, 92, 231, 0.4);
+    0 0 100px rgba(108, 92, 231, 0.4); */
 }
 
 .planet-glow {
@@ -192,31 +196,51 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .planet-display {
-    padding: 6rem 1.5rem 3rem;
+    padding: 7rem 2rem 1.5rem;
   }
 
   .planet-name {
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
+    font-size: 3.5rem;
+    margin-bottom: 2.5rem;
   }
 
   .planet-stats {
-    gap: 2rem;
-    margin-bottom: 3rem;
+    gap: 3rem;
+    margin-bottom: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .planet-display {
+    padding: 5rem 1.5rem 1rem;
+  }
+
+  .planet-name {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.1em;
+  }
+
+  .planet-stats {
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    max-width: 100%;
   }
 
   .stat-item {
-    min-width: 100px;
+    min-width: 90px;
+    flex: 0 1 auto;
   }
 
   .stat-label {
     font-size: 0.65rem;
+    margin-bottom: 0.2rem;
   }
 
   .stat-value {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   .planet-container {
@@ -227,33 +251,36 @@
 
 @media (max-width: 480px) {
   .planet-display {
-    padding: 5rem 1rem 2rem;
+    padding: 4.5rem 1rem 1rem;
   }
 
   .planet-name {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.08em;
   }
 
   .planet-stats {
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    flex-direction: column;
-    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .stat-item {
-    min-width: 100px;
-    width: 100%;
-    max-width: 200px;
+    min-width: 85px;
+    width: auto;
+    max-width: 120px;
+    flex: 0 1 auto;
   }
 
   .stat-label {
     font-size: 0.6rem;
+    margin-bottom: 0.15rem;
   }
 
   .stat-value {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
 
   .planet-container {
@@ -262,14 +289,31 @@
   }
 }
 
-@media (max-width: 320px) {
-  .planet-name {
-    font-size: 1.5rem;
+@media (max-width: 360px) {
+  .planet-display {
+    padding: 4rem 0.8rem 1rem;
   }
 
-  .planet-container {
-    width: 180px;
-    height: 180px;
+  .planet-name {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .planet-stats {
+    gap: 1rem;
+  }
+
+  .stat-item {
+    min-width: 75px;
+    max-width: 100px;
+  }
+
+  .stat-label {
+    font-size: 0.55rem;
+  }
+
+  .stat-value {
+    font-size: 0.75rem;
   }
 }
 
