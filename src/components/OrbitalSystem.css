@@ -58,19 +58,10 @@
 }
 
 .celestial-body.center-planet .body-image {
-  box-shadow:
-    inset -20px -20px 60px rgba(0, 0, 0, 0.8),  /* inner shadow (dark side) */
-    inset 10px 10px 20px rgba(255, 255, 255, 0.3), /* light reflection */
-    0 0 40px rgba(0, 0, 0, 0.7); /* outer ambient shadow */
-  filter: brightness(1.1) contrast(1.05);
-  /* filter: drop-shadow(0 0 80px rgba(255, 255, 255, 0.5)) 
-          drop-shadow(0 0 120px rgba(255, 255, 255, 0.3))
-          drop-shadow(0 0 160px rgba(255, 255, 255, 0.2)); */
-  /* box-shadow: 
-    0 0 100px rgba(255, 255, 255, 0.4),
-    0 0 150px rgba(255, 255, 255, 0.3),
-    0 0 200px rgba(255, 255, 255, 0.2),
-    inset -30px -30px 60px rgba(0, 0, 0, 0.2); */
+  filter: drop-shadow(0px 20px 15px rgba(0, 0, 0, 0.6))
+          brightness(1.1)
+          contrast(1.05)
+          saturate(1.2);
 }
 
 .body-image {
@@ -81,6 +72,24 @@
   transition: transform 0.3s ease, filter 0.3s ease;
   pointer-events: none;
   filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
+}
+
+/* Planet-specific colors for center planet only */
+.etheron.center-planet .body-image {
+  filter: drop-shadow(0px 35px 18px rgba(156, 39, 176, 0.7))
+ 
+}
+
+.orionis.center-planet .body-image {
+  filter: drop-shadow(0px 30px 18px rgba(74, 144, 226, 0.6))    
+}
+
+.lumenara.center-planet .body-image {
+  filter: drop-shadow(0px 35px 18px rgba(255, 107, 53, 0.7))
+}
+
+.theronix.center-planet .body-image {
+  filter: drop-shadow(0px 35px 18px rgba(74, 226, 147, 0.6))
 }
 
 @keyframes glowPulse {
@@ -115,13 +124,13 @@
   pointer-events: auto;
 }
 
-.body-sphere:hover {
+/* .body-sphere:hover {
   transform: scale(1.2);
   box-shadow: 
     0 0 30px rgba(255, 255, 255, 0.5),
     0 0 60px var(--color),
     0 0 100px var(--color);
-}
+} */
 
 @keyframes bodyRotate {
   from {
@@ -131,16 +140,11 @@
     transform: rotate(360deg);
   }
 }
-
+  
 /* Specific planet styles */
-.planet .body-sphere {
-  box-shadow: 
-    0 0 30px rgba(255, 255, 255, 0.4),
-    0 0 60px var(--color),
-    0 0 100px var(--color),
-    inset -15px -15px 40px rgba(0, 0, 0, 0.4);
+.etheron .body-sphere {
+  background: linear-gradient(135deg, #4a90e2 0%, #2ecc71 50%, #3498db 100%);
 }
-
 .orionis .body-sphere {
   background: linear-gradient(135deg, #4a90e2 0%, #2ecc71 50%, #3498db 100%);
 }
@@ -218,15 +222,7 @@
     top: 70%;
   }
 
-  .celestial-body.center-planet .body-image {
-    filter: drop-shadow(0 0 60px rgba(255, 255, 255, 0.4)) 
-            drop-shadow(0 0 100px rgba(255, 255, 255, 0.25))
-            drop-shadow(0 0 140px rgba(255, 255, 255, 0.15));
-    box-shadow: 
-      0 0 80px rgba(255, 255, 255, 0.35),
-      0 0 120px rgba(255, 255, 255, 0.25),
-      0 0 160px rgba(255, 255, 255, 0.15);
-  }
+  
 
   .celestial-body.center-planet::before {
     width: 115%;
@@ -253,15 +249,6 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  .celestial-body.center-planet .body-image {
-    filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.4)) 
-            drop-shadow(0 0 70px rgba(255, 255, 255, 0.25))
-            drop-shadow(0 0 100px rgba(255, 255, 255, 0.15));
-    box-shadow: 
-      0 0 60px rgba(255, 255, 255, 0.3),
-      0 0 90px rgba(255, 255, 255, 0.2),
-      0 0 120px rgba(255, 255, 255, 0.15);
-  }
 
   .celestial-body.center-planet::before {
     width: 110%;
@@ -302,15 +289,6 @@
     top: 68%;
   }
 
-  .celestial-body.center-planet .body-image {
-    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.35)) 
-            drop-shadow(0 0 50px rgba(255, 255, 255, 0.2))
-            drop-shadow(0 0 70px rgba(255, 255, 255, 0.1));
-    box-shadow: 
-      0 0 40px rgba(255, 255, 255, 0.25),
-      0 0 60px rgba(255, 255, 255, 0.15),
-      0 0 80px rgba(255, 255, 255, 0.1);
-  }
 
   .celestial-body.center-planet::before {
     width: 105%;
@@ -348,12 +326,5 @@
     display: none;
   }
 
-  .celestial-body.center-planet .body-image {
-    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.3)) 
-            drop-shadow(0 0 40px rgba(255, 255, 255, 0.15));
-    box-shadow: 
-      0 0 30px rgba(255, 255, 255, 0.2),
-      0 0 50px rgba(255, 255, 255, 0.1);
-  }
 }
 

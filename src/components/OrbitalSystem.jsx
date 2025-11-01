@@ -14,35 +14,35 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
   const animationFrameRef = useRef(null)
   
   // Helper function to get unique orbital distance for each celestial body
-  // Center planet (ETHERON) has size 600, so radius = 300px
+  // Center planet (ETHERON) has size 400, so radius = 200px
   // Orbits should start outside the center planet's border with proper padding
   // Improved spacing with consistent intervals for better visual balance
   const getOrbitalDistance = (bodyId) => {
-    // Center planet radius = 300px, minimum safe orbit = 300px + body radius + padding
+    // Center planet radius = 200px, minimum safe orbit = 200px + body radius + padding
     // Improved distances with better spacing from center to outer orbits
     const orbitalDistances = {
       // Moons - closer orbits with 50px spacing intervals
-      // Starting from 350px (50px from center planet edge)
-      'moon1': 350,      // First moon orbit - 50px from center edge
-      'moon2': 400,      // Second moon orbit - 100px from center edge
-      'moon3': 450,      // Third moon orbit - 150px from center edge
-      'moon4': 500,      // Fourth moon orbit - 200px from center edge
-      'moon5': 550,      // Fifth moon orbit - 250px from center edge
-      'moon6': 600,      // Sixth moon orbit - 300px from center edge
+      // Starting from 280px (80px from center planet edge)
+      'moon1': 280,      // First moon orbit - 80px from center edge
+      'moon2': 330,      // Second moon orbit - 130px from center edge
+      'moon3': 380,      // Third moon orbit - 180px from center edge
+      'moon4': 430,      // Fourth moon orbit - 230px from center edge
+      'moon5': 480,      // Fifth moon orbit - 280px from center edge
+      'moon6': 530,      // Sixth moon orbit - 330px from center edge
       
-      // Planets - outer orbits with 250px spacing intervals
-      // Starting from 650px (350px from center planet edge)
-      'orionis': 650,    // First planet orbit - 350px from center edge
-      'lumenara': 900,   // Second planet orbit - 600px from center edge
-      'theronix': 1150,  // Third planet orbit - 850px from center edge
-      'etheron': 1400    // Fourth planet orbit - 1100px from center edge (when not centered)
+      // Planets - on second last orbit rings (unused/inactive rings) with good spacing
+      // Positioned between moons and outer edge, using orbit rings that are visible but not occupied
+      'orionis': 680,    // First planet - on second last orbit ring (150px spacing from last moon)
+      'lumenara': 830,   // Second planet - on second last orbit ring  
+      'theronix': 980,   // Third planet - on second last orbit ring
+      'etheron': 1130    // Fourth planet - on second last orbit ring (when not centered)
     };
     
     return orbitalDistances[bodyId] || 0;
   };
   
   const [planetPositions, setPlanetPositions] = useState(() => {
-    // Center planet (ETHERON) radius = 300px
+    // Center planet (ETHERON) radius = 200px
     // Each celestial body gets a unique orbital distance
     
     const initialBodies = [
@@ -50,7 +50,7 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
         id: 'etheron', 
         name: 'ETHERON', 
         image: etheronImage, 
-        size: 600, 
+        size: 400, 
         initialDistance: 0, // Center planet starts at center
         initialAngle: 180, 
         speed: 0.01, // Give it a slow speed for when it orbits
@@ -207,7 +207,7 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
               distance: 0,
               isMovingToCenter: !isAtCenter,
               isCenter: isAtCenter,
-              size: isAtCenter ? 1000 : body.size
+              size: isAtCenter ? 500 : body.size
             }
           }
           // Handle previous center planet returning to orbit
@@ -265,7 +265,7 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
               currentY: 0,
               distance: 0,
               isCenter: true,
-              size: 800
+              size: 500
             }
           }
           // Default case
@@ -362,7 +362,7 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
               angle: returnAngle >= 0 ? returnAngle : returnAngle + 360,
               distance: returnDistance,
               targetDistance: returnDistance,
-              size: body.size === 600 || body.size === 800 || body.size === 1000 ? 120 : body.size, // Reset size if it was center planet
+              size: body.size === 400 || body.size === 500 || body.size === 1000 ? 120 : body.size, // Reset size if it was center planet
               currentX: atCenter ? returnDistance : body.currentX || 0,
               currentY: atCenter ? 0 : body.currentY || 0
             }
@@ -395,7 +395,7 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
         const x = body.currentX !== undefined ? body.currentX : 0
         const y = body.currentY !== undefined ? body.currentY : 0
         
-        const planetSize = body.size || (isCenter ? 800 : body.size)
+        const planetSize = body.size || (isCenter ? 500 : body.size)
         
         return (
           <div
