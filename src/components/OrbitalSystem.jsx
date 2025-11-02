@@ -1,50 +1,34 @@
 import { useEffect, useRef, useState } from 'react'
-import orionisImage from '../assets/ORIONIS.png'
-import lumenaraImage from '../assets/LUMENARA.png'
-import etheronImage from '../assets/ETHERON.png'
-import theronixImage from '../assets/THERONIX.png'
+import orionisImage from '../assets/images/ORIONIS.png'
+import lumenaraImage from '../assets/images/LUMENARA.png'
+import etheronImage from '../assets/images/ETHERON.png'
+import theronixImage from '../assets/images/THERONIX.png'
 import './OrbitalSystem.css'
 import OrbitalCanvas from './OrbitalCanvas'
 
-/**
- * OrbitalSystem component displaying celestial bodies
- */
 function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
   const orbitalSystemRef = useRef(null)
   const animationFrameRef = useRef(null)
   
-  // Helper function to get unique orbital distance for each celestial body
-  // Center planet (ETHERON) has size 400, so radius = 200px
-  // Orbits should start outside the center planet's border with proper padding
-  // Improved spacing with consistent intervals for better visual balance
   const getOrbitalDistance = (bodyId) => {
-    // Center planet radius = 200px, minimum safe orbit = 200px + body radius + padding
-    // Improved distances with better spacing from center to outer orbits
+    
     const orbitalDistances = {
-      // Moons - closer orbits with 50px spacing intervals
-      // Starting from 280px (80px from center planet edge)
-      'moon1': 280,      // First moon orbit - 80px from center edge
-      'moon2': 330,      // Second moon orbit - 130px from center edge
-      'moon3': 380,      // Third moon orbit - 180px from center edge
-      'moon4': 430,      // Fourth moon orbit - 230px from center edge
-      'moon5': 480,      // Fifth moon orbit - 280px from center edge
-      'moon6': 530,      // Sixth moon orbit - 330px from center edge
-      
-      // Planets - on second last orbit rings (unused/inactive rings) with good spacing
-      // Positioned between moons and outer edge, using orbit rings that are visible but not occupied
-      'orionis': 680,    // First planet - on second last orbit ring (150px spacing from last moon)
-      'lumenara': 830,   // Second planet - on second last orbit ring  
-      'theronix': 980,   // Third planet - on second last orbit ring
-      'etheron': 1130    // Fourth planet - on second last orbit ring (when not centered)
+      'moon1': 280,
+      'moon2': 330,
+      'moon3': 380,
+      'moon4': 430,
+      'moon5': 480,
+      'moon6': 530,
+      'orionis': 680,
+      'lumenara': 830,
+      'theronix': 980,
+      'etheron': 1130
     };
     
     return orbitalDistances[bodyId] || 0;
   };
   
   const [planetPositions, setPlanetPositions] = useState(() => {
-    // Center planet (ETHERON) radius = 200px
-    // Each celestial body gets a unique orbital distance
-    
     const initialBodies = [
       { 
         id: 'etheron', 
@@ -321,25 +305,19 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
       // Mark all planets for position update
       setPlanetPositions(prev => {
         const updated = {}
-        const previousCenter = Object.values(prev).find(b => b.isCenter && b.id !== bodyId)
         
         Object.keys(prev).forEach(id => {
           const body = prev[id]
           if (id === bodyId) {
-            // Mark clicked planet to move to center
-            const currentX = body.currentX || 0
-            const currentY = body.currentY || 0
             updated[id] = {
               ...body,
               isMovingToCenter: true,
               targetDistance: 0,
               targetX: 0,
               targetY: 0,
-              isCenter: false // Will be set when it reaches center
+              isCenter: false
             }
           } else if (body.isCenter && id !== bodyId) {
-            // Previous center planet moves back to orbit
-            // Use unique orbital distance for this specific body
             const atCenter = Math.abs(body.currentX || 0) < 1 && Math.abs(body.currentY || 0) < 1
             let returnAngle = body.angle || 180
             let returnDistance = body.targetDistance || getOrbitalDistance(body.id)
