@@ -6,9 +6,43 @@ import theronixImage from '../assets/images/THERONIX.png'
 import './OrbitalSystem.css'
 import OrbitalCanvas from './OrbitalCanvas'
 
+// Base sizes (desktop) - constant outside component
+// ETHERON uses 400 when centered, but 130 when orbiting (like other planets)
+const baseSizes = {
+  etheron: 130,  // Default orbit size (same as theronix)
+  orionis: 120,
+  lumenara: 140,
+  theronix: 130,
+  moon1: 40,
+  moon2: 35,
+  moon3: 30,
+  moon4: 32,
+  moon5: 28,
+  moon6: 25
+}
+
+// Calculate responsive size multiplier based on screen width
+const getSizeMultiplier = (width) => {
+  if (width <= 480) return 0.35      // Extra small mobile
+  if (width <= 640) return 0.45      // Small mobile
+  if (width <= 768) return 0.55      // Mobile
+  if (width <= 1024) return 0.75     // Tablet
+  if (width <= 1440) return 0.9      // Small desktop
+  return 1                            // Large desktop
+}
+
 function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
   const orbitalSystemRef = useRef(null)
   const animationFrameRef = useRef(null)
+  const [screenSize, setScreenSize] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 1920,
+    height: typeof window !== 'undefined' ? window.innerHeight : 1080
+  })
+  
+  // Get responsive size for planets and moons
+  const getResponsiveSize = (baseSize) => {
+    return Math.round(baseSize * getSizeMultiplier(screenSize.width))
+  }
   
   const getOrbitalDistance = (bodyId) => {
     
@@ -29,12 +63,14 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
   };
   
   const [planetPositions, setPlanetPositions] = useState(() => {
+    const multiplier = getSizeMultiplier(screenSize.width)
     const initialBodies = [
       { 
         id: 'etheron', 
         name: 'ETHERON', 
         image: etheronImage, 
-        size: 400, 
+        size: Math.round(500 * multiplier), // Start at center size
+        baseSize: baseSizes.etheron, // Use orbit size (130) when not centered
         initialDistance: 0, // Center planet starts at center
         initialAngle: 180, 
         speed: 0.01, // Give it a slow speed for when it orbits
@@ -45,7 +81,8 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
         id: 'orionis', 
         name: 'ORIONIS', 
         image: orionisImage, 
-        size: 120, 
+        size: Math.round(baseSizes.orionis * multiplier), 
+        baseSize: baseSizes.orionis,
         initialDistance: getOrbitalDistance('orionis'), // 550
         initialAngle: 180, 
         speed: 0.02, 
@@ -55,7 +92,8 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
         id: 'lumenara', 
         name: 'LUMENARA', 
         image: lumenaraImage, 
-        size: 140, 
+        size: Math.round(baseSizes.lumenara * multiplier), 
+        baseSize: baseSizes.lumenara,
         initialDistance: getOrbitalDistance('lumenara'), // 800
         initialAngle: 0, 
         speed: 0.015, 
@@ -65,7 +103,8 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
         id: 'theronix', 
         name: 'THERONIX', 
         image: theronixImage, 
-        size: 130, 
+        size: Math.round(baseSizes.theronix * multiplier), 
+        baseSize: baseSizes.theronix,
         initialDistance: getOrbitalDistance('theronix'), // 1100
         initialAngle: 90, 
         speed: 0.018, 
@@ -75,7 +114,8 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
         id: 'moon1', 
         name: '', 
         color: '#4dd0e1', 
-        size: 40, 
+        size: Math.round(baseSizes.moon1 * multiplier), 
+        baseSize: baseSizes.moon1,
         initialDistance: getOrbitalDistance('moon1'), // 380
         initialAngle: 45, 
         speed: 0.03, 
@@ -85,7 +125,8 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
         id: 'moon2', 
         name: '', 
         color: '#66bb6a', 
-        size: 35, 
+        size: Math.round(baseSizes.moon2 * multiplier), 
+        baseSize: baseSizes.moon2,
         initialDistance: getOrbitalDistance('moon2'), // 420
         initialAngle: 135, 
         speed: 0.035, 
@@ -95,7 +136,8 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
         id: 'moon3', 
         name: '', 
         color: '#ff9800', 
-        size: 30, 
+        size: Math.round(baseSizes.moon3 * multiplier), 
+        baseSize: baseSizes.moon3,
         initialDistance: getOrbitalDistance('moon3'), // 460
         initialAngle: 225, 
         speed: 0.025, 
@@ -105,7 +147,8 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
         id: 'moon4', 
         name: '', 
         color: '#ab47bc', 
-        size: 32, 
+        size: Math.round(baseSizes.moon4 * multiplier), 
+        baseSize: baseSizes.moon4,
         initialDistance: getOrbitalDistance('moon4'), // 500
         initialAngle: 315, 
         speed: 0.027, 
@@ -115,7 +158,8 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
         id: 'moon5', 
         name: '', 
         color: '#ef5350', 
-        size: 28, 
+        size: Math.round(baseSizes.moon5 * multiplier), 
+        baseSize: baseSizes.moon5,
         initialDistance: getOrbitalDistance('moon5'), // 540
         initialAngle: 270, 
         speed: 0.037, 
@@ -125,7 +169,8 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
         id: 'moon6', 
         name: '', 
         color: '#ffb74d', 
-        size: 25, 
+        size: Math.round(baseSizes.moon6 * multiplier), 
+        baseSize: baseSizes.moon6,
         initialDistance: getOrbitalDistance('moon6'), // 580
         initialAngle: 90, 
         speed: 0.032, 
@@ -152,6 +197,48 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
   })
   
 
+  // Handle window resize to update sizes
+  useEffect(() => {
+    const handleResize = () => {
+      const newWidth = window.innerWidth
+      const newHeight = window.innerHeight
+      
+      // Calculate multiplier based on new width
+      const multiplier = getSizeMultiplier(newWidth)
+      
+      setScreenSize({
+        width: newWidth,
+        height: newHeight
+      })
+      
+      // Update all planet and moon sizes based on new screen size
+      setPlanetPositions(prev => {
+        const updated = {}
+        Object.keys(prev).forEach(bodyId => {
+          const body = prev[bodyId]
+          // If planet is centered, use center size (500px responsive)
+          if (body.isCenter) {
+            updated[bodyId] = {
+              ...body,
+              size: Math.round(500 * multiplier)
+            }
+          } else {
+            // Otherwise use base size for regular planets/moons
+            const baseSize = body.baseSize || baseSizes[bodyId] || body.size
+            updated[bodyId] = {
+              ...body,
+              size: Math.round(baseSize * multiplier)
+            }
+          }
+        })
+        return updated
+      })
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   useEffect(() => {
     const system = orbitalSystemRef.current
     if (!system) return
@@ -163,6 +250,12 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
       const isSmallMobile = window.innerWidth <= 480
       const padding = isSmallMobile ? 60 : isMobile ? 80 : 100
       const maxDistance = Math.min(rect.width, rect.height) / 2 - padding
+      
+      // Calculate responsive center planet size (original: 500px, now responsive)
+      const centerSizeMultiplier = getSizeMultiplier(window.innerWidth)
+      const getCenterPlanetSize = () => {
+        return Math.round(500 * centerSizeMultiplier)
+      }
 
       setPlanetPositions(prev => {
         const updated = {}
@@ -191,7 +284,7 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
               distance: 0,
               isMovingToCenter: !isAtCenter,
               isCenter: isAtCenter,
-              size: isAtCenter ? 500 : body.size
+              size: isAtCenter ? getCenterPlanetSize() : body.size
             }
           }
           // Handle previous center planet returning to orbit
@@ -249,7 +342,7 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
               currentY: 0,
               distance: 0,
               isCenter: true,
-              size: 500
+              size: getCenterPlanetSize()
             }
           }
           // Default case
@@ -333,6 +426,11 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
               returnAngle = 180
             }
             
+            // Reset size to responsive base size if it was center planet
+            const baseSize = body.baseSize || baseSizes[id] || 120
+            const multiplier = getSizeMultiplier(window.innerWidth)
+            const responsiveSize = Math.round(baseSize * multiplier)
+            
             updated[id] = {
               ...body,
               isCenter: false,
@@ -340,7 +438,7 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
               angle: returnAngle >= 0 ? returnAngle : returnAngle + 360,
               distance: returnDistance,
               targetDistance: returnDistance,
-              size: body.size === 400 || body.size === 500 || body.size === 1000 ? 120 : body.size, // Reset size if it was center planet
+              size: responsiveSize, // Reset size to responsive base size
               currentX: atCenter ? returnDistance : body.currentX || 0,
               currentY: atCenter ? 0 : body.currentY || 0
             }
@@ -373,7 +471,8 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
         const x = body.currentX !== undefined ? body.currentX : 0
         const y = body.currentY !== undefined ? body.currentY : 0
         
-        const planetSize = body.size || (isCenter ? 500 : body.size)
+        // Use the size from body state (already responsive)
+        const planetSize = body.size || getResponsiveSize(baseSizes[body.id] || 100)
         
         return (
           <div
