@@ -1,16 +1,100 @@
-# React + Vite
+# 🌌 3D Planet Design - Interactive Orbital System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive 3D planet visualization where you can explore planets and moons orbiting in real-time.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Four Planets**: ETHERON, ORIONIS, LUMENARA, and THERONIX
+- **Six Moons**: Colorful moons orbiting in different layers
+- **Click to Focus**: Click any planet to bring it to center
+- **Smooth Animations**: Planets transition smoothly when selected
+- **Orbital Rings**: Visible orbit circles show planet paths
+- **Fully Responsive**: Works on desktop, tablet, and mobile
 
-## React Compiler
+## 🚀 Quick Start
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **Install dependencies**
 
-## Expanding the ESLint configuration
+   ```bash
+   npm install
+   ```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+2. **Start development server**
+
+   ```bash
+   npm run dev
+   ```
+
+3. **Open browser** at `http://localhost:5173`
+
+## 🎮 How to Use
+
+- Click any planet to bring it to the center
+- Watch planets and moons orbit in real-time
+- Use navigation to switch between pages
+
+## 🛠️ Technologies
+
+- React 19
+- Vite
+- React Router
+- Canvas API
+
+## 📁 Project Structure
+
+```
+src/
+├── components/
+│   ├── OrbitalSystem.jsx    # Main orbital system
+│   ├── OrbitalCanvas.jsx     # Orbit rings rendering
+│   ├── PlanetDisplay.jsx      # Planet info display
+│   └── StarField.jsx         # Starfield background
+├── pages/
+│   ├── Galaxy.jsx           # Main galaxy view
+│   └── Home.jsx             # Home page
+└── assets/
+    └── images/              # Planet images
+```
+
+## 🎨 Customization
+
+### Add New Planet
+
+1. Add image to `src/assets/images/`
+2. Update `baseSizes` in `OrbitalSystem.jsx`
+3. Add distance in `getOrbitalDistance()`
+
+### Change Sizes
+
+Edit `baseSizes` object:
+
+```javascript
+const baseSizes = {
+  etheron: 130,
+  orionis: 120,
+  // your sizes
+};
+```
+
+### Adjust Distances
+
+Modify `getOrbitalDistance()`:
+
+```javascript
+const orbitalDistances = {
+  moon1: 180,
+  moon2: 240,
+  orionis: 580,
+  // your distances
+};
+```
+
+## 📝 Build for Production
+
+```bash
+npm run build
+```
+
+---
+
+**Made with React ⚛️**

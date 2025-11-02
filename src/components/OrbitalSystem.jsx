@@ -45,21 +45,23 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
   }
   
   const getOrbitalDistance = (bodyId) => {
-    
+    // Evenly spaced orbital distances for better visual distribution
     const orbitalDistances = {
-      'moon1': 280,
-      'moon2': 330,
-      'moon3': 380,
-      'moon4': 430,
-      'moon5': 480,
-      'moon6': 530,
-      'orionis': 680,
-      'lumenara': 830,
-      'theronix': 980,
-      'etheron': 1130
+      // Inner moons - evenly spaced
+      'moon1': 780,
+      'moon2': 730,
+      'moon3': 580,
+      'moon4': 530,
+      'moon5': 680,
+      'moon6': 630,
+      // Planets - evenly spaced outward
+      'orionis': 780,   // First planet layer
+      'lumenara': 880,  // Second planet layer
+      'theronix': 980,  // Third planet layer
+      'etheron': 880    // Fourth planet layer (outermost)
     };
     
-    return orbitalDistances[bodyId] || 0;
+    return orbitalDistances[bodyId];
   };
   
   const [planetPositions, setPlanetPositions] = useState(() => {
@@ -249,7 +251,11 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
       const isMobile = window.innerWidth <= 768
       const isSmallMobile = window.innerWidth <= 480
       const padding = isSmallMobile ? 60 : isMobile ? 80 : 100
-      const maxDistance = Math.min(rect.width, rect.height) / 2 - padding
+      // Calculate max distance - use the smaller of width/height to ensure planets stay within bounds
+      // Account for space above and below center (use 45% to leave margin at top and bottom)
+      const containerMax = Math.min(rect.width / 2, rect.height * 0.45) - padding
+      // Ensure maxDistance is reasonable - at least 400px but not larger than needed
+      const maxDistance = containerMax > 0 ? Math.max(Math.min(containerMax, 600), 400) : 500
       
       // Calculate responsive center planet size (original: 500px, now responsive)
       const centerSizeMultiplier = getSizeMultiplier(window.innerWidth)
@@ -318,20 +324,53 @@ function OrbitalSystem({ focusedPlanet, onPlanetClick }) {
           // Handle other planets orbiting
           else if (bodyId !== focusedPlanet && !body.isCenter) {
             const newAngle = (body.angle + body.speed) % 360
-            // Use the unique orbital distance for this body, but ensure it doesn't exceed maxDistance
-            const bodyOrbitalDistance = getOrbitalDistance(bodyId) || body.targetDistance || body.distance
-            const boundedDistance = Math.min(bodyOrbitalDistance, maxDistance)
+            // Use the unique orbital distance for this body
+            const bodyOrbitalDistance = getOrbitalDistance(bodyId)
+            if (!bodyOrbitalDistance) {
+              console.warn(`${bodyId}: getOrbitalDistance returned 0, using fallback`);
+            }
+            // Get the intended orbit distance
+            let intendedDistance = bodyOrbitalDistance || body.targetDistance || body.distance
+            
+            // Scale all orbits proportionally to fit within container while maintaining relative spacing
+            const largestOrbit = Math.max(
+              getOrbitalDistance('etheron'),
+              getOrbitalDistance('theronix'),
+              getOrbitalDistance('lumenara'),
+              getOrbitalDistance('orionis'),
+              880 // Updated largest orbit
+            )
+            
+            let finalDistance = intendedDistance
+            
+            // Always scale proportionally to ensure all planets fit and are visible
+            if (maxDistance > 0 && largestOrbit > 0) {
+              const scaleFactor = maxDistance / largestOrbit
+              // Apply scaling, but ensure minimum visibility (at least 30% of original)
+              const scaledDistance = intendedDistance * scaleFactor
+              // Only use scaling if it results in a reasonable size
+              if (scaledDistance > 50 && scaledDistance <= maxDistance) {
+                finalDistance = scaledDistance
+              } else if (intendedDistance > maxDistance) {
+                // If still too large, cap at maxDistance
+                finalDistance = maxDistance
+              } else {
+                // Use intended distance if it fits
+                finalDistance = intendedDistance
+              }
+            }
+            
             const angleRad = (newAngle * Math.PI) / 180
-            const x = Math.cos(angleRad) * boundedDistance
-            const y = Math.sin(angleRad) * boundedDistance
+            const x = Math.cos(angleRad) * finalDistance
+            const y = Math.sin(angleRad) * finalDistance
             
             updated[bodyId] = {
               ...body,
               angle: newAngle,
-              distance: boundedDistance,
+              distance: finalDistance,
               currentX: x,
               currentY: y,
-              targetDistance: bodyOrbitalDistance // Keep original orbital distance as target
+              targetDistance: bodyOrbitalDistance || body.targetDistance // Keep original orbital distance as target
             }
           }
           // Handle center planet (focused)

@@ -33,17 +33,19 @@ const OrbitalCanvas = ({ planets = [], orbitalSystemRef }) => {
         
         planets.forEach((planet) => {
           if (!planet.isCenter && planet.distance > 0) {
-            // Only draw unique distances to avoid overlapping circles
+            // Use the planet's distance (already scaled responsively in OrbitalSystem)
+            // Round to nearest pixel for crisp rendering
             const distance = Math.round(planet.distance);
             
+            // Only draw unique distances to avoid overlapping circles
             if (!drawnDistances.has(distance)) {
               drawnDistances.add(distance);
               
-              // Different styling for planets vs moons - subtle and elegant
-              // Adjust line width for mobile devices
-              const isMobile = window.innerWidth <= 768
-              const baseLineWidth = isMobile ? 0.8 : 1.2
-              const baseOpacity = isMobile ? 0.15 : 0.2
+              // Different styling for planets vs moons - responsive based on screen size
+              const isMobile = window.innerWidth <= 768;
+              const isSmallMobile = window.innerWidth <= 480;
+              const baseLineWidth = isSmallMobile ? 0.7 : isMobile ? 0.8 : 1.2;
+              const baseOpacity = isSmallMobile ? 0.12 : isMobile ? 0.15 : 0.2;
               
               if (planet.type === 'planet') {
                 ctx.strokeStyle = `rgba(255, 255, 255, ${baseOpacity})`;
@@ -53,37 +55,36 @@ const OrbitalCanvas = ({ planets = [], orbitalSystemRef }) => {
                 ctx.lineWidth = baseLineWidth * 0.67;
               }
               
+              // Draw circle at the responsive distance
               ctx.beginPath();
-              ctx.arc(centerX, centerY, planet.distance, 0, Math.PI * 2);
+              ctx.arc(centerX, centerY, distance, 0, Math.PI * 2);
               ctx.stroke();
             }
           }
         });
 
-        // Draw additional orbital rings to fill the screen
+        // Draw additional orbital rings to fill gaps (optional, responsive)
         const planetDistances = planets
           .filter(p => !p.isCenter && p.distance > 0)
           .map(p => p.distance);
-        
-        if (planetDistances.length > 0) {
-          const maxDistance = Math.max(
-            ...planetDistances,
-            window.innerWidth / 2,
-            window.innerHeight / 2
-          );
           
+        if (planetDistances.length > 0) {
           const minDistance = Math.min(...planetDistances);
+          const maxDistance = Math.max(...planetDistances);
           const screenMaxDistance = Math.max(window.innerWidth, window.innerHeight) / 2;
-
-          // Fill in gaps with additional subtle orbits - very faint
-          // Adjust spacing for mobile
-          const spacing = window.innerWidth <= 768 ? 120 : 150
-          const minGapDistance = window.innerWidth <= 480 ? 80 : 100
-          for (let i = Math.floor(minDistance); i <= screenMaxDistance; i += spacing) {
-            if (!drawnDistances.has(i) && i > minGapDistance) {
-              const gapOpacity = window.innerWidth <= 768 ? 0.03 : 0.05
+          
+          // Responsive spacing for gap-filling rings
+          const isMobile = window.innerWidth <= 768;
+          const isSmallMobile = window.innerWidth <= 480;
+          const spacing = isSmallMobile ? 80 : isMobile ? 100 : 120;
+          const minGapDistance = Math.max(minDistance, isSmallMobile ? 60 : isMobile ? 80 : 100);
+          
+          // Fill gaps between actual orbits with subtle rings
+          for (let i = Math.floor(minDistance); i <= Math.min(maxDistance * 1.2, screenMaxDistance); i += spacing) {
+            if (!drawnDistances.has(i) && i >= minGapDistance) {
+              const gapOpacity = isSmallMobile ? 0.02 : isMobile ? 0.03 : 0.04;
               ctx.strokeStyle = `rgba(255, 255, 255, ${gapOpacity})`;
-              ctx.lineWidth = window.innerWidth <= 768 ? 0.4 : 0.5;
+              ctx.lineWidth = isSmallMobile ? 0.3 : isMobile ? 0.4 : 0.5;
               ctx.beginPath();
               ctx.arc(centerX, centerY, i, 0, Math.PI * 2);
               ctx.stroke();
